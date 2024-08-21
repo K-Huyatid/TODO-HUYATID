@@ -1,3 +1,5 @@
+// Add this to your script.js file
+
 let selectedRow = null;
 let itemNumber = 1;
 
@@ -27,12 +29,36 @@ function insertNewRecord(data) {
 
     newRow.innerHTML = `
         <td>${itemNumber++}</td>
-        <td>${data.todoItem}</td>
+        <td class="todo-item">${data.todoItem}</td>
         <td>
             <a onClick="onEdit(this)">Edit</a>
             <a onClick="onDelete(this)">Delete</a>
         </td>
+        <td>
+            <input type="checkbox" onclick="onMark(this)">
+        </td>
     `;
+}
+
+function onMark(checkbox) {
+    const row = checkbox.parentElement.parentElement;
+    const itemCell = row.querySelector('.todo-item'); // Get the cell with the item text
+
+    if (checkbox.checked) {
+        itemCell.classList.add('checked');
+        Swal.fire(
+            'Marked!',
+            'Your item has been marked.',
+            'success'
+        );
+    } else {
+        itemCell.classList.remove('checked');
+        Swal.fire(
+            'Unmarked!',
+            'Your item has been unmarked.',
+            'info'
+        );
+    }
 }
 
 function resetForm() {
@@ -61,7 +87,6 @@ function onEdit(td) {
     });
 }
 
-
 function updateRecord(formData) {
     if (selectedRow) {
         selectedRow.cells[1].textContent = formData.todoItem;
@@ -73,7 +98,6 @@ function updateRecord(formData) {
         selectedRow = null; // Reset selectedRow after updating
     }
 }
-
 
 function onDelete(td) {
     Swal.fire({
@@ -119,3 +143,42 @@ function updateRowNumbers() {
         row.cells[0].textContent = itemNumber++;
     });
 }
+
+function onMark(checkbox) {
+    const row = checkbox.parentElement.parentElement;
+    const itemCell = row.cells[1];
+
+    if (checkbox.checked) {
+        itemCell.classList.add('checked');
+        Swal.fire(
+            'Marked!',
+            'Your item has been marked.',
+            'success'
+        );
+    } else {
+        itemCell.classList.remove('checked');
+        Swal.fire(
+            'Unmarked!',
+            'Your item has been unmarked.',
+            'info'
+        );
+    }
+}
+
+// Ensure that the logo moves to random positions on mouseover
+document.addEventListener("DOMContentLoaded", function() {
+    const logo = document.querySelector(".banner-logo");
+    const banner = document.querySelector(".banner");
+
+    logo.addEventListener("mouseover", function() {
+        const maxX = banner.clientWidth - logo.clientWidth;
+        const maxY = banner.clientHeight - logo.clientHeight;
+
+        const randomX = Math.floor(Math.random() * maxX);
+        const randomY = Math.floor(Math.random() * maxY);
+
+        logo.style.position = "absolute";
+        logo.style.left = `${randomX}px`;
+        logo.style.top = `${randomY}px`;
+    });
+});
