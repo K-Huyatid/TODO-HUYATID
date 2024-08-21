@@ -4,8 +4,12 @@ let itemNumber = 1;
 function onFormSubmit() {
     if (validate()) {
         const formData = readFormData();
-        if (!selectedRow) insertNewRecord(formData);
-        else updateRecord(formData);
+        if (!selectedRow) {
+            insertNewRecord(formData); // Add new item
+        } else {
+            updateRecord(formData); // Update existing item
+            selectedRow = null; // Reset selectedRow after update
+        }
         resetForm();
     }
 }
@@ -37,8 +41,7 @@ function resetForm() {
 }
 
 function onEdit(td) {
-    selectedRow = td.parentElement.parentElement;
-    const currentItem = selectedRow.cells[1].textContent;
+    const currentItem = td.parentElement.parentElement.cells[1].textContent;
 
     Swal.fire({
         title: 'Edit To-Do Item',
@@ -49,20 +52,28 @@ function onEdit(td) {
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
+            selectedRow = td.parentElement.parentElement; // Set selectedRow only if edit is confirmed
             const formData = { todoItem: result.value };
             updateRecord(formData);
+        } else {
+            selectedRow = null; // Reset selectedRow if the edit is canceled
         }
     });
 }
 
+
 function updateRecord(formData) {
-    selectedRow.cells[1].textContent = formData.todoItem;
-    Swal.fire(
-        'Updated!',
-        'Your item has been updated.',
-        'success'
-    );
+    if (selectedRow) {
+        selectedRow.cells[1].textContent = formData.todoItem;
+        Swal.fire(
+            'Updated!',
+            'Your item has been updated.',
+            'success'
+        );
+        selectedRow = null; // Reset selectedRow after updating
+    }
 }
+
 
 function onDelete(td) {
     Swal.fire({
