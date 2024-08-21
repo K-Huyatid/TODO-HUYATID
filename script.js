@@ -1,7 +1,5 @@
 let selectedRow = null;
-let itemNumber = 1;  // Initialize item number
-const modal = document.getElementById("editModal");
-const closeModal = document.querySelector(".modal .close");
+let itemNumber = 1;
 
 function onFormSubmit() {
     if (validate()) {
@@ -21,7 +19,7 @@ function readFormData() {
 function insertNewRecord(data) {
     const table = document.getElementById("todoList").querySelector('tbody');
     const newRow = table.insertRow();
-    newRow.setAttribute('data-row-index', itemNumber); // Store the item number in a data attribute
+    newRow.setAttribute('data-row-index', itemNumber);
 
     newRow.innerHTML = `
         <td>${itemNumber++}</td>
@@ -41,13 +39,29 @@ function resetForm() {
 function onEdit(td) {
     selectedRow = td.parentElement.parentElement;
     const currentItem = selectedRow.cells[1].textContent;
-    document.getElementById("editTodoItem").value = currentItem;
-    modal.style.display = "block";
+
+    Swal.fire({
+        title: 'Edit To-Do Item',
+        input: 'text',
+        inputValue: currentItem,
+        showCancelButton: true,
+        confirmButtonText: 'Update',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const formData = { todoItem: result.value };
+            updateRecord(formData);
+        }
+    });
 }
 
 function updateRecord(formData) {
     selectedRow.cells[1].textContent = formData.todoItem;
-    modal.style.display = "none"; // Close modal after update
+    Swal.fire(
+        'Updated!',
+        'Your item has been updated.',
+        'success'
+    );
 }
 
 function onDelete(td) {
@@ -62,8 +76,8 @@ function onDelete(td) {
     }).then((result) => {
         if (result.isConfirmed) {
             const row = td.parentElement.parentElement;
-            row.remove(); // Remove the row from the table
-            updateRowNumbers(); // Update numbering after deletion
+            row.remove();
+            updateRowNumbers();
             Swal.fire(
                 'Deleted!',
                 'Your item has been deleted.',
@@ -89,21 +103,8 @@ function validate() {
 
 function updateRowNumbers() {
     const rows = document.querySelectorAll("#todoList tbody tr");
-    itemNumber = 1; // Reset item number
+    itemNumber = 1;
     rows.forEach(row => {
         row.cells[0].textContent = itemNumber++;
     });
-}
-
-// Handle modal close
-closeModal.onclick = function() {
-    modal.style.display = "none";
-}
-
-// Handle modal form submit
-document.getElementById("editForm").onsubmit = function(event) {
-    event.preventDefault();
-    const formData = { todoItem: document.getElementById("editTodoItem").value };
-    updateRecord(formData);
-    resetForm();
 }
