@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JavaScript To-Do List</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+<body>
+    <header class="banner">
+        <h1 class="banner-title">To-Do List</h1>
+        <img src="https://i.pinimg.com/736x/91/7b/92/917b9250bd0cf7e6250f055229bc6ad4.jpg" alt="Logo" class="banner-logo">
+    </header>
+    <hr>
+    <div class="form-container">
+        <form onsubmit="event.preventDefault(); onFormSubmit();" autocomplete="off">
+            <div class="form-group">
+                <label for="todoItem">To-Do Item</label>
+                <label class="validation-error hide" id="todoValidationError">Item Required</label>
+                <input type="text" name="todoItem" id="todoItem">
+            </div>
+            <div class="form-action-buttons">
+                <input type="submit" value="Add Item">
+            </div>
+        </form>
+    </div>
+    <br/>
+    <div class="table-container">
+        <table class="list" id="todoList">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Items</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+<div id="editModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit To-Do Item</h2>
+        <form id="editForm">
+            <label for="editTodoItem">To-Do Item</label>
+            <input type="text" id="editTodoItem">
+            <input type="submit" value="Update Item">
+        </form>
+    </div>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
