@@ -133,6 +133,11 @@ tr:nth-child(even), thead tr {
         order: 2;
     }
 
+.checked {
+    text-decoration: line-through;
+}
+
+
     .form-container, .table-container {
         width: 100%;
         padding: 10px;
